@@ -1,17 +1,13 @@
--
+
 const baseUrl = 'https://pokeapi.co/api/v2/pokemon/';
-
-
 const getElement = document.querySelector.bind(document);
 const searchInput = getElement('.search-input'),
       searchButton = getElement('.search-button'),
       container = getElement('.pokemon'),
       erroMessage = getElement('.error');
-
 var pokeName, 
     pokemon, 
     card; 
-
 async function requestPokeInfo(url, name) {
   await fetch(url + name)
     .then(response => response.json())
@@ -20,8 +16,6 @@ async function requestPokeInfo(url, name) {
     })
     .catch(err => console.log(err));
 }
-
-
 function createCard () {
   card = `
     <div class="pokemon-picture">
@@ -36,10 +30,9 @@ function createCard () {
     </div>`;
   return card;
 }
-
-
 async function startApp(pokeName) {
   await requestPokeInfo(baseUrl, pokeName);
+
     if(pokemon.detail) {
       erroMessage.style.display = 'block';
       container.style.display = 'none';
@@ -49,5 +42,15 @@ async function startApp(pokeName) {
       container.innerHTML = createCard();
     }
 }
+searchButton.addEventListener('click', event => {
+  event.preventDefault();
+  pokeName = searchInput.value.toLowerCase();
+  searchInput.value = '';
+  startApp(pokeName);
+  container.classList.add('fade');
 
 
+  setTimeout(() => {
+    container.classList.remove('fade');
+  }, 3000);
+});
